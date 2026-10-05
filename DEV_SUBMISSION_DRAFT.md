@@ -20,11 +20,13 @@ The front end is one HTML file. A small Python HTTP server serves it and calls G
 
 ## Demo
 
-<!-- Add a screenshot or short demo video here before publishing. -->
+Live demo (temporary; available while the host computer and tunnel are running): https://carriers-intl-raid-salmon.trycloudflare.com
+
+The demo has a shared limit of 30 AI requests per hour. Notes are stored in each visitor's browser and sent to Groq when an AI feature is used.
 
 ## Source code
 
-<!-- Replace with the public repository URL before publishing. -->
+https://github.com/AIVIETNAM-AIO-felixdoit/hacktobefest2026-challenge1
 
 ## What I learned and what comes next
 

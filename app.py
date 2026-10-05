@@ -2,6 +2,8 @@
 
 import json
 import os
+import threading
+import time
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 
@@ -13,6 +15,20 @@ except ModuleNotFoundError:
 
 ROOT = Path(__file__).resolve().parent
 MAX_BODY = 120_000
+DEMO_LIMIT = 30
+demo_calls: list[float] = []
+demo_lock = threading.Lock()
+
+
+def allow_demo_call() -> bool:
+    """Bound public demo use to 30 AI requests per rolling hour."""
+    now = time.monotonic()
+    with demo_lock:
+        demo_calls[:] = [stamp for stamp in demo_calls if now - stamp < 3600]
+        if len(demo_calls) >= DEMO_LIMIT:
+            return False
+        demo_calls.append(now)
+        return True
 
 
 def build_messages(mode: str, notes: str, question: str) -> list[dict[str, str]]:
@@ -91,6 +107,9 @@ class Handler(BaseHTTPRequestHandler):
                 raise ValueError("Dữ liệu gửi lên quá lớn hoặc rỗng.")
             payload = json.loads(self.rfile.read(length))
             messages = build_messages(payload.get("mode", ""), payload.get("notes", ""), payload.get("question", ""))
+            if not allow_demo_call():
+                self.send_json(429, {"error": "Demo đã đạt giới hạn 30 lượt AI trong một giờ. Vui lòng thử lại sau."})
+                return
             answer = groq_chat(messages)
             self.send_json(200, {"answer": answer})
         except (ValueError, json.JSONDecodeError, AttributeError) as exc:
