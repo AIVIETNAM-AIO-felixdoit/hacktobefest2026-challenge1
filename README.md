@@ -1,6 +1,6 @@
 # StudyNest
 
-Một ứng dụng ôn bài nhỏ dành cho người bạn đang học từ nhiều ghi chú rời rạc. Bạn có thể lưu ghi chú, hỏi đáp dựa trên ghi chú, tạo 5 câu hỏi tự luyện và tóm tắt nhanh. Giao diện dùng tiếng Việt.
+Một ứng dụng ôn bài nhỏ dành cho người bạn đang học từ nhiều ghi chú rời rạc. Bạn có thể lưu ghi chú, hỏi đáp dựa trên ghi chú, tạo 5 câu hỏi tự luyện và tóm tắt nhanh. Nút **VI / EN** đổi ngôn ngữ giao diện và câu trả lời AI; lựa chọn được lưu trong trình duyệt.
 
 ## Chạy ứng dụng
 
