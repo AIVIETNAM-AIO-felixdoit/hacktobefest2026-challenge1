@@ -1,31 +1,36 @@
 # StudyNest
 
-Một ứng dụng ôn bài nhỏ dành cho người bạn đang học từ nhiều ghi chú rời rạc. Bạn có thể lưu ghi chú, hỏi đáp dựa trên ghi chú, tạo 5 câu hỏi tự luyện và tóm tắt nhanh. Nút **VI / EN** đổi ngôn ngữ giao diện và câu trả lời AI; lựa chọn được lưu trong trình duyệt.
+StudyNest helps learners review scattered notes. Save notes in your browser, ask questions grounded in them, generate five practice questions with suggested answers, or get a short summary. Use the **VI / EN** switch to change the interface and the language of AI responses. Your language choice is saved in the browser.
 
-## Chạy ứng dụng
+**Live demo:** https://hacktobefest2026-studynest.onrender.com/
 
-1. Tạo API key tại [Groq Console](https://console.groq.com/keys).
-2. Cài Groq SDK: `python -m pip install -r requirements.txt`.
-3. Sao chép `config_example.py` thành `config.py`, rồi dán **key mới** vào `GROQ_API_KEY` (giữa hai dấu nháy). Trong thư mục hiện tại, `config.py` đã được tạo sẵn. Key đã chia sẻ trong chat cần được thu hồi.
-4. Chạy `python app.py` rồi mở `http://127.0.0.1:8000`.
+## Run locally
 
-Mặc định ứng dụng dùng model mở `openai/gpt-oss-20b` qua Groq; có thể đổi `GROQ_MODEL` trong `config.py`. File `config.py` nằm trong `.gitignore` để không bị commit lên Git. **Đừng chia sẻ file này hoặc đưa key vào README hay ảnh chụp màn hình.** Ghi chú sẽ được gửi tới Groq khi bạn bấm một chức năng AI; hãy cân nhắc trước khi nhập nội dung nhạy cảm. Giá và giới hạn sử dụng phụ thuộc tài khoản Groq.
+1. Create an API key in the [Groq Console](https://console.groq.com/keys).
+2. Install dependencies: `python -m pip install -r requirements.txt`.
+3. Copy `config_example.py` to `config.py` and put your key in `GROQ_API_KEY`.
+4. Run `python app.py` and open `http://127.0.0.1:8000`.
 
-## Deploy trên Render
+The default model is `openai/gpt-oss-20b`. Change `GROQ_MODEL` in `config.py` if you want to use another model available to your Groq account. `config.py` is ignored by Git. Never commit or share your API key.
 
-Repo có `render.yaml` để tạo Python Web Service. Vào [Render Dashboard](https://dashboard.render.com/), chọn **New → Blueprint**, kết nối GitHub repo này, rồi nhập `GROQ_API_KEY` khi Render hỏi. Chọn tên service bạn muốn trước khi tạo; tên đó nằm trong URL `*.onrender.com` nếu chưa bị dùng. Không đưa `config.py` lên GitHub. Nếu deploy thủ công bằng **New → Web Service**, đặt build command `pip install -r requirements.txt`, start command `python app.py`, và thêm `GROQ_API_KEY` trong mục Environment. Sau khi deploy, kiểm tra `/api/health` trả `"configured": true`.
+## Deploy on Render
 
-## Vì sao AI mở quan trọng
+The repository includes `render.yaml` for a Python Web Service. In the [Render Dashboard](https://dashboard.render.com/), choose **New → Blueprint**, connect this repository, and enter `GROQ_API_KEY` when prompted. You can also create a Web Service manually with:
 
-Ứng dụng dùng model trọng số mở GPT-OSS qua Groq. Ghi chú được gửi tới Groq để xử lý AI và lưu trong localStorage của trình duyệt, nên đừng xóa dữ liệu trình duyệt nếu muốn giữ chúng lâu dài.
+- Build command: `pip install -r requirements.txt`
+- Start command: `python app.py`
+- Environment variable: `GROQ_API_KEY` set to your secret key
 
-## Giới hạn
+The app reads the deployment's `PORT` and binds to the required interface automatically. Once deployed, `/api/health` should return `"configured": true`.
 
-- Cần Groq API key và kết nối mạng để dùng các tính năng AI.
-- Model có thể trả lời sai; hãy đối chiếu với ghi chú gốc.
-- Ghi chú chỉ lưu trong một trình duyệt, chưa có đồng bộ hoặc xuất dữ liệu.
-- Đây là prototype. Chưa có câu chuyện từ người dùng thật hoặc phản hồi sau khi bàn giao.
+## How it works
 
-## Hacktoberfest Weekend Challenge
+The front end is a single HTML file served by a small Python HTTP server. Notes and the chosen language are stored in browser `localStorage`. When you use an AI feature, the server sends the notes to Groq with instructions to answer from the notes and acknowledge missing information. The public demo allows at most 30 AI requests per hour across visitors.
 
-Ý tưởng phù hợp chủ đề **Build for a Friend**. Trước khi nộp, cần xác nhận người nhận thực tế, cho họ dùng thử, ghi lại phản hồi thật, quay/chụp demo và viết bài DEV bằng tiếng Anh theo [mẫu nộp bài](https://dev.to/challenges/hacktoberfest-weekend-2026-10-01). Không nên tuyên bố đã bàn giao hoặc đã có phản hồi nếu chưa thực hiện.
+StudyNest uses the open-weight GPT-OSS model through Groq. This avoids downloading a large model to a computer with limited disk space. Notes are sent to Groq only when an AI feature is used; consider this before entering sensitive information.
+
+## Limitations
+
+- AI features need an internet connection and a Groq API key.
+- AI answers may be wrong. Check them against your source material.
+- Notes stay in one browser and currently have no export or synchronization feature.

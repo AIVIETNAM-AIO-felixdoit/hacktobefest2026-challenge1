@@ -2,3 +2,4 @@ config.py
 __pycache__/
 *.pyc
 demo-*.log
+DEV_SUBMISSION_DRAFT.md
