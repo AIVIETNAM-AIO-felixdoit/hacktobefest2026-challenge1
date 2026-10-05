@@ -8,12 +8,14 @@ from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 
 try:
-    from config import GROQ_API_KEY, GROQ_MODEL
+    from config import GROQ_API_KEY as LOCAL_GROQ_API_KEY, GROQ_MODEL as LOCAL_GROQ_MODEL
 except ModuleNotFoundError:
-    from config_example import GROQ_API_KEY, GROQ_MODEL
+    from config_example import GROQ_API_KEY as LOCAL_GROQ_API_KEY, GROQ_MODEL as LOCAL_GROQ_MODEL
 
 
 ROOT = Path(__file__).resolve().parent
+GROQ_API_KEY = os.environ.get("GROQ_API_KEY") or LOCAL_GROQ_API_KEY
+GROQ_MODEL = os.environ.get("GROQ_MODEL") or LOCAL_GROQ_MODEL
 MAX_BODY = 120_000
 DEMO_LIMIT = 30
 demo_calls: list[float] = []
@@ -120,5 +122,6 @@ class Handler(BaseHTTPRequestHandler):
 
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", "8000"))
-    print(f"StudyNest: http://127.0.0.1:{port}  |  provider: groq  |  model: {GROQ_MODEL}")
-    ThreadingHTTPServer(("127.0.0.1", port), Handler).serve_forever()
+    host = "0.0.0.0" if os.environ.get("PORT") else "127.0.0.1"
+    print(f"StudyNest: http://{host}:{port}  |  provider: groq  |  model: {GROQ_MODEL}")
+    ThreadingHTTPServer((host, port), Handler).serve_forever()

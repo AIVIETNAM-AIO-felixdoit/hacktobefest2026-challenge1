@@ -11,6 +11,10 @@ Một ứng dụng ôn bài nhỏ dành cho người bạn đang học từ nhi�
 
 Mặc định ứng dụng dùng model mở `openai/gpt-oss-20b` qua Groq; có thể đổi `GROQ_MODEL` trong `config.py`. File `config.py` nằm trong `.gitignore` để không bị commit lên Git. **Đừng chia sẻ file này hoặc đưa key vào README hay ảnh chụp màn hình.** Ghi chú sẽ được gửi tới Groq khi bạn bấm một chức năng AI; hãy cân nhắc trước khi nhập nội dung nhạy cảm. Giá và giới hạn sử dụng phụ thuộc tài khoản Groq.
 
+## Deploy trên Render
+
+Repo có `render.yaml` để tạo Python Web Service. Vào [Render Dashboard](https://dashboard.render.com/), chọn **New → Blueprint**, kết nối GitHub repo này, rồi nhập `GROQ_API_KEY` khi Render hỏi. Chọn tên service bạn muốn trước khi tạo; tên đó nằm trong URL `*.onrender.com` nếu chưa bị dùng. Không đưa `config.py` lên GitHub. Nếu deploy thủ công bằng **New → Web Service**, đặt build command `pip install -r requirements.txt`, start command `python app.py`, và thêm `GROQ_API_KEY` trong mục Environment. Sau khi deploy, kiểm tra `/api/health` trả `"configured": true`.
+
 ## Vì sao AI mở quan trọng
 
 Ứng dụng dùng model trọng số mở GPT-OSS qua Groq. Ghi chú được gửi tới Groq để xử lý AI và lưu trong localStorage của trình duyệt, nên đừng xóa dữ liệu trình duyệt nếu muốn giữ chúng lâu dài.

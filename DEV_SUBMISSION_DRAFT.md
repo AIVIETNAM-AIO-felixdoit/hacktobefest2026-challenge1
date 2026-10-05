@@ -20,7 +20,7 @@ The front end is one HTML file. A small Python HTTP server serves it and calls G
 
 ## Demo
 
-Live demo (temporary; available while the host computer and tunnel are running): https://carriers-intl-raid-salmon.trycloudflare.com
+<!-- Add the Render URL after deployment. The old temporary tunnel is no longer active. -->
 
 The demo has a shared limit of 30 AI requests per hour. Notes are stored in each visitor's browser and sent to Groq when an AI feature is used.
 
